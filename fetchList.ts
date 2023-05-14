@@ -1,3 +1,4 @@
+import { cleanObj } from "./utils.ts";
 
 
 const baseUrl = 'https://developer.nrel.gov/api/alt-fuel-stations/v1';
@@ -12,6 +13,7 @@ const writeList = async () => {
     const res = await fetch(url)
     if (res.ok) {
         const data = await res.json();
+        // data.fuel_stations = data.fuel_stations.map((station: any) => cleanObj(station))
         await Deno.writeTextFile(`list_electric_charger_${(new Date()).toISOString().split('T')[0]}.json`, JSON.stringify(data, null, 2));
     }
 }
