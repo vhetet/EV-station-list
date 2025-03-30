@@ -10,9 +10,11 @@ type ChargerData = {
 };
 
 export const compareFiles = async (): Promise<void> => {
-    // Read all files in the current directory
+    const dataDir = "./data"; // Directory where JSON files are stored
+
+    // Read all files in the data directory
     const files: string[] = [];
-    for await (const file of Deno.readDir(".")) {
+    for await (const file of Deno.readDir(dataDir)) {
         if (file.isFile && file.name.startsWith("list_electric_charger_") && file.name.endsWith(".json")) {
             files.push(file.name);
         }
@@ -27,7 +29,7 @@ export const compareFiles = async (): Promise<void> => {
     }
 
     // Select the two latest files
-    const [newFilePath, oldFilePath] = files;
+    const [newFilePath, oldFilePath] = files.map(file => `${dataDir}/${file}`);
 
     console.log(`Comparing files: ${newFilePath} and ${oldFilePath}`);
 
