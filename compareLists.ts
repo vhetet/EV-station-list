@@ -10,8 +10,26 @@ type ChargerData = {
 };
 
 export const compareFiles = async (): Promise<void> => {
-    const newFilePath = 'list_electric_charger_2023-05-13.json';
-    const oldFilePath = 'list_electric_charger_2023-05-01.json';
+    // Read all files in the current directory
+    const files: string[] = [];
+    for await (const file of Deno.readDir(".")) {
+        if (file.isFile && file.name.startsWith("list_electric_charger_") && file.name.endsWith(".json")) {
+            files.push(file.name);
+        }
+    }
+
+    // Sort files by date in descending order (latest first)
+    files.sort((a, b) => b.localeCompare(a));
+
+    if (files.length < 2) {
+        console.error("Not enough files to compare. At least two JSON files are required.");
+        return;
+    }
+
+    // Select the two latest files
+    const [newFilePath, oldFilePath] = files;
+
+    console.log(`Comparing files: ${newFilePath} and ${oldFilePath}`);
 
     // Parse JSON files with proper types
     const newData: ChargerData = JSON.parse(await Deno.readTextFile(newFilePath));
@@ -44,6 +62,8 @@ export const compareFiles = async (): Promise<void> => {
     stationsDiffIds.forEach((id) => {
         console.log(stationsMap.get(id));
     });
+
+    console.log(`Done comparing files: ${newFilePath} and ${oldFilePath}`);
 };
 
 compareFiles();
