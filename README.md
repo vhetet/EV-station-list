@@ -21,7 +21,7 @@ This repository contains a set of Deno scripts to fetch and track the evolution 
 To fetch the latest list of EV chargers:
 
 ```sh
-deno run --allow-write --allow-net [fetchList.ts](http://_vscodecontentref_/1)
+deno run --allow-write --allow-net fetchList.ts
 ```
 
 ### Compare EV Charger list
